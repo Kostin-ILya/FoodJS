@@ -1,10 +1,11 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
+	//============= Tabs
 	const tabs = document.querySelectorAll('.tabheader__item'),
 		tabsContent = document.querySelectorAll('.tabcontent'),
 		tabsParent = document.querySelector('.tabheader');
-	// Tabs
+
 	function hideTabContent() {
 		tabsContent.forEach((item) => {
 			item.classList.add('hide');
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	hideTabContent();
 	showTabContent();
 
-	// Timer
+	//================== Timer
 
 	const deadLine = '2022-08-01';
 
@@ -92,4 +93,40 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	setClock('.timer', deadLine);
+
+	//=============== Modal
+
+	const modalTrigger = document.querySelectorAll('[data-modal]'),
+		modal = document.querySelector('.modal'),
+		modalCloseBtn = document.querySelector('.modal__close');
+
+	function closeModal() {
+		modal.classList.toggle('show');
+		document.body.style.overflow = '';
+	}
+
+	modalTrigger.forEach((btn) => {
+		btn.addEventListener('click', () => {
+			// modal.style.display = 'block';
+			modal.classList.toggle('show');
+			document.body.style.overflow = 'hidden';
+		});
+	});
+
+	modalCloseBtn.addEventListener('click', () => {
+		// modal.style.display = 'none';
+		closeModal();
+	});
+
+	modal.addEventListener('click', (e) => {
+		if (e.target === modal) {
+			closeModal();
+		}
+	});
+
+	document.addEventListener('keydown', (e) => {
+		if (e.code === 'Escape' && modal.classList.contains('show')) {
+			closeModal();
+		}
+	});
 });
