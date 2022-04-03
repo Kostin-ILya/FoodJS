@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		modal = document.querySelector('.modal'),
 		modalCloseBtn = document.querySelector('.modal__close');
 
-	const timerModal = setTimeout(openModal, 10000);
+	// const timerModal = setTimeout(openModal, 10000);
 
 	function closeModal() {
 		modal.classList.toggle('show');
@@ -151,14 +151,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	// ====================================== Class
 
 	class MenuCard {
-		constructor(src, alt, title, descr, price, parentSelector) {
+		constructor(src, alt, title, descr, price, parentSelector, ...classes) {
 			this.src = src;
 			this.alt = alt;
 			this.title = title;
 			this.descr = descr;
 			this.price = price;
-			this.exchangeRate = 100;
+			this.exchangeRate = 95;
 			this.parent = document.querySelector(parentSelector);
+			this.classes = classes;
 			this.changeToRUB();
 		}
 
@@ -168,18 +169,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		render() {
 			const elem = document.createElement('div');
+			const defaultClass = 'menu__item';
 
-			elem.innerHTML = `
-				<div class="menu__item">
-					<img src= ${this.src} alt=${this.alt}>
-					<h3 class="menu__item-subtitle">${this.title}</h3>
-					<div class="menu__item-descr">${this.descr}</div>
-					<div class="menu__item-divider"></div>
-					<div class="menu__item-price">
-							<div class="menu__item-cost">Цена:</div>
-							<div class="menu__item-total"><span>${this.price}</span> руб/день</div>
-					</div>
-				</div>
+			if (this.classes.length === 0) {
+				elem.classList.add(defaultClass);
+			} else {
+				this.classes.forEach((className) => {
+					elem.classList.add(className);
+				});
+			}
+			console.log(this.classes);
+
+			elem.innerHTML = `				
+				<img src= ${this.src} alt=${this.alt}>
+				<h3 class="menu__item-subtitle">${this.title}</h3>
+				<div class="menu__item-descr">${this.descr}</div>
+				<div class="menu__item-divider"></div>
+				<div class="menu__item-price">
+						<div class="menu__item-cost">Цена:</div>
+						<div class="menu__item-total"><span>${this.price}</span> руб/день</div>
+				</div>				
 			`;
 
 			this.parent.append(elem);
@@ -198,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'img/tabs/elite.jpg',
 		'elite',
 		'Меню “Премиум”',
-		'>В меню “Премиум” мы используем не только красивый дизайн упаковки, но	и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+		'В меню “Премиум” мы используем не только красивый дизайн упаковки, но	и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!lorem lorem lorem lorem',
 		15,
 		'.menu .container'
 	).render();
