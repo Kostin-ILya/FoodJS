@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	// );
 	// newCard.render();
 
-	// ============================ Forms (XMLHttpRequest)
+	// ============================ Forms (XMLHttpRequest) Fetch
 
 	const forms = document.querySelectorAll('form');
 	const messages = {
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		form.addEventListener('submit', (e) => {
 			e.preventDefault();
 
-			const r = new XMLHttpRequest();
+			// const r = new XMLHttpRequest();
 			const formData = new FormData(form);
 
 			const statusMessage = document.createElement('img');
@@ -266,22 +266,42 @@ document.addEventListener('DOMContentLoaded', () => {
 			formData.forEach((value, key) => {
 				obj[key] = value;
 			});
-			const json = JSON.stringify(obj);
+			// const json = JSON.stringify(obj);
 
-			r.open('POST', 'server.php');
-			r.setRequestHeader('Content-type', 'application/json');
-			r.send(json);
-
-			r.addEventListener('load', () => {
-				if (r.status === 200) {
-					console.log(json);
+			fetch('server.php', {
+				method: 'POST',
+				headers: {
+					'Content-type': 'application/json',
+				},
+				body: JSON.stringify(obj),
+			})
+				.then((response) => response.text())
+				.then((data) => {
+					console.log(data);
 					showThanksModal(messages.success);
-					form.reset();
 					statusMessage.remove();
-				} else {
+				})
+				.catch(() => {
 					showThanksModal(messages.failure);
-				}
-			});
+				})
+				.finally(() => {
+					form.reset();
+				});
+
+			// r.open('POST', 'server.php');
+			// r.setRequestHeader('Content-type', 'application/json');
+			// r.send(json);
+
+			// r.addEventListener('load', () => {
+			// 	if (r.status === 200) {
+			// 		console.log(json);
+			// 		showThanksModal(messages.success);
+			// 		form.reset();
+			// 		statusMessage.remove();
+			// 	} else {
+			// 		showThanksModal(messages.failure);
+			// 	}
+			// });
 		});
 	}
 
@@ -307,4 +327,14 @@ document.addEventListener('DOMContentLoaded', () => {
 			closeModal();
 		}, 2000);
 	}
+
+	fetch('https://jsonplaceholder.typicode.com/todos/67')
+		.then((data) => {
+			console.dir(data);
+			return data;
+		})
+		.then((response) => response.json())
+		.then((json) => {
+			console.log(json);
+		});
 });
