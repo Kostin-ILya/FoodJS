@@ -1,0 +1,19 @@
+{
+  "name": "foodjs",
+  "version": "1.0.0",
+  "description": "Site food",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KostinIlia/Food.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KostinIlia/Food/issues"
+  },
+  "homepage": "https://github.com/KostinIlia/Food#readme"
+}

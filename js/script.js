@@ -328,13 +328,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		}, 2000);
 	}
 
-	fetch('https://jsonplaceholder.typicode.com/todos/67')
-		.then((data) => {
-			console.dir(data);
-			return data;
-		})
-		.then((response) => response.json())
-		.then((json) => {
-			console.log(json);
-		});
+	// fetch('https://jsonplaceholder.typicode.com/todos/67')
+	// 	.then((data) => {
+	// 		console.dir(data);
+	// 		return data;
+	// 	})
+	// 	.then((response) => response.json())
+	// 	.then((json) => {
+	// 		console.log(json);
+	// 	});
 });
