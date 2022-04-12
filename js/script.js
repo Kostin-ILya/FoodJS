@@ -191,30 +191,56 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
-	new MenuCard(
-		'img/tabs/vegy.jpg',
-		'vegy',
-		'Меню "Фитнес"',
-		'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-		6,
-		'.menu .container'
-	).render();
-	new MenuCard(
-		'img/tabs/elite.jpg',
-		'elite',
-		'Меню “Премиум”',
-		'В меню “Премиум” мы используем не только красивый дизайн упаковки, но	и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!lorem lorem lorem lorem',
-		15,
-		'.menu .container'
-	).render();
-	new MenuCard(
-		'img/tabs/post.jpg',
-		'post',
-		'Меню "Постное"',
-		'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие	продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное		количество белков за счет тофу и импортных вегетарианских стейков.',
-		12,
-		'.menu .container'
-	).render();
+	async function getResourse(url) {
+		let res = await fetch(url);
+		console.log(res);
+
+		if (!res.ok) {
+			throw new Error(`Ошибочка ${url}, status: ${res.status}`);
+		}
+
+		return await res.json();
+	}
+
+	getResourse('http://localhost:3000/menu')
+		.then((data) => {
+			data.forEach(({ img, altimg, title, descr, price }) => {
+				new MenuCard(
+					img,
+					altimg,
+					title,
+					descr,
+					price,
+					'.menu .container'
+				).render();
+			});
+		})
+		.catch((err) => console.error(err));
+
+	// new MenuCard(
+	// 	'img/tabs/vegy.jpg',
+	// 	'vegy',
+	// 	'Меню "Фитнес"',
+	// 	'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+	// 	6,
+	// 	'.menu .container'
+	// ).render();
+	// new MenuCard(
+	// 	'img/tabs/elite.jpg',
+	// 	'elite',
+	// 	'Меню “Премиум”',
+	// 	'В меню “Премиум” мы используем не только красивый дизайн упаковки, но	и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!lorem lorem lorem lorem',
+	// 	15,
+	// 	'.menu .container'
+	// ).render();
+	// new MenuCard(
+	// 	'img/tabs/post.jpg',
+	// 	'post',
+	// 	'Меню "Постное"',
+	// 	'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие	продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное		количество белков за счет тофу и импортных вегетарианских стейков.',
+	// 	12,
+	// 	'.menu .container'
+	// ).render();
 
 	// const newCard = new MenuCard(
 	// 	'img/tabs/vegy.jpg',
@@ -236,10 +262,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	forms.forEach((item) => {
-		postData(item);
+		bindPostData(item);
 	});
 
-	function postData(form) {
+	const postData = async (url, data) => {
+		const res = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: data,
+		});
+		return await res.json();
+	};
+
+	function bindPostData(form) {
 		form.addEventListener('submit', (e) => {
 			e.preventDefault();
 
@@ -253,29 +290,31 @@ document.addEventListener('DOMContentLoaded', () => {
 				margin: 0 auto;
 			`;
 			form.after(statusMessage);
-
 			// Вставка в виде HTML
 			// form.insertAdjacentHTML(
 			// 	'afterend',
 			// 	`<img src='${messages.loading}' style ='display: block; margin: 0 auto;'>`
 			// );
-
 			// отправка на сервер JSON
 			// если нужна отправка FormData, то надо удалить [r.setRequestHeader] и поменять в r.send(formData). XMLHttpRequest и FormData => не нужны HTTP заголовки, они проставляются авто
-			const obj = {};
-			formData.forEach((value, key) => {
-				obj[key] = value;
-			});
-			// const json = JSON.stringify(obj);
 
-			fetch('server.php', {
-				method: 'POST',
-				headers: {
-					'Content-type': 'application/json',
-				},
-				body: JSON.stringify(obj),
-			})
-				.then((response) => response.text())
+			// МЕТОДЫ ПАРСИНГА FORMDATA В JSON
+			// const obj = {};
+			// formData.forEach((value, key) => {
+			// 	obj[key] = value;
+			// });
+			// const json = JSON.stringify(obj);
+			const json = JSON.stringify(Object.fromEntries(formData.entries()));
+
+			// fetch('http://localhost:3000/requests', {
+			// 	method: 'POST',
+			// 	headers: {
+			// 		'Content-type': 'application/json',
+			// 	},
+			// 	body: JSON.stringify(obj),
+			// })
+			// 	.then((response) => response.text())
+			postData('http://localhost:3000/requests', json)
 				.then((data) => {
 					console.log(data);
 					showThanksModal(messages.success);
@@ -287,7 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				.finally(() => {
 					form.reset();
 				});
-
 			// r.open('POST', 'server.php');
 			// r.setRequestHeader('Content-type', 'application/json');
 			// r.send(json);
