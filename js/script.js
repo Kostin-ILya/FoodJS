@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		tabsParent = document.querySelector('.tabheader');
 
 	function hideTabContent() {
-		tabsContent.forEach((item) => {
+		tabsContent.forEach(item => {
 			item.classList.add('hide');
 			item.classList.remove('show', 'fade');
 
-			tabs.forEach((item) => {
+			tabs.forEach(item => {
 				item.classList.remove('tabheader__item_active');
 			});
 		});
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		tabs[i].classList.add('tabheader__item_active');
 	}
 
-	tabsParent.addEventListener('click', (event) => {
+	tabsParent.addEventListener('click', event => {
 		const target = event.target;
 		console.log(target);
 
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const modalTrigger = document.querySelectorAll('[data-modal]'),
 		modal = document.querySelector('.modal');
 
-	const timerModal = setTimeout(openModal, 50000);
+	// const timerModal = setTimeout(openModal, 50000);
 
 	function closeModal() {
 		modal.classList.add('hide');
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		modal.classList.add('show');
 		modal.classList.remove('hide');
 		document.body.style.overflow = 'hidden';
-		clearTimeout(timerModal);
+		// clearTimeout(timerModal);
 	}
 	function openModalByScroll() {
 		if (
@@ -126,20 +126,20 @@ document.addEventListener('DOMContentLoaded', () => {
 	window.addEventListener('scroll', openModalByScroll);
 	openModalByScroll();
 
-	modalTrigger.forEach((btn) => {
+	modalTrigger.forEach(btn => {
 		btn.addEventListener('click', () => {
 			openModal();
 		});
 	});
 
-	modal.addEventListener('click', (e) => {
+	modal.addEventListener('click', e => {
 		if (e.target === modal || e.target.dataset.close == '') {
 			closeModal();
 		}
 		// e.target.getAttribute('data-close') == ''
 	});
 
-	document.addEventListener('keydown', (e) => {
+	document.addEventListener('keydown', e => {
 		if (e.code === 'Escape' && modal.classList.contains('show')) {
 			closeModal();
 		}
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (this.classes.length === 0) {
 				elem.classList.add(defaultClass);
 			} else {
-				this.classes.forEach((className) => {
+				this.classes.forEach(className => {
 					elem.classList.add(className);
 				});
 			}
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	getResourse('http://localhost:3000/menu')
-		.then((data) => {
+		.then(data => {
 			data.forEach(({ img, altimg, title, descr, price }) => {
 				new MenuCard(
 					img,
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				).render();
 			});
 		})
-		.catch((err) => console.error(err));
+		.catch(err => console.error(err));
 
 	// axios
 	// 	.get('http://localhost:3000/menu')
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		failure: 'Что-то пошло не так',
 	};
 
-	forms.forEach((item) => {
+	forms.forEach(item => {
 		bindPostData(item);
 	});
 
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	function bindPostData(form) {
-		form.addEventListener('submit', (e) => {
+		form.addEventListener('submit', e => {
 			e.preventDefault();
 
 			// const r = new XMLHttpRequest();
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			// })
 			// 	.then((response) => response.text())
 			postData('http://localhost:3000/requests', json)
-				.then((data) => {
+				.then(data => {
 					console.log(data);
 					showThanksModal(messages.success);
 					statusMessage.remove();
@@ -393,51 +393,127 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// ======================================== Slider
 
+	// const slides = document.querySelectorAll('.offer__slide'),
+	// 	arrowPrev = document.querySelector('.offer__slider-prev'),
+	// 	arrowNext = document.querySelector('.offer__slider-next'),
+	// 	current = document.querySelector('#current'),
+	// 	total = document.querySelector('#total');
+	// let slideIndex = 1;
+
+	// showSlides(slideIndex);
+
+	// if (slides.length < 10) {
+	// 	total.textContent = '0' + slides.length;
+	// } else {
+	// 	total.textContent = slides.length;
+	// }
+
+	// function showSlides(n) {
+	// 	if (n > slides.length) {
+	// 		slideIndex = 1;
+	// 	}
+	// 	if (n < 1) {
+	// 		slideIndex = slides.length;
+	// 	}
+
+	// 	slides.forEach((slide) => {
+	// 		slide.classList.add('hide');
+	// 		slide.classList.remove('show');
+	// 	});
+	// 	slides[slideIndex - 1].classList.add('show');
+
+	// 	if (slideIndex < 10) {
+	// 		current.textContent = '0' + slideIndex;
+	// 	} else {
+	// 		current.textContent = slideIndex;
+	// 	}
+	// }
+
+	// function plusSlides(n) {
+	// 	slideIndex += n;
+	// 	showSlides(slideIndex);
+	// }
+
+	// arrowPrev.addEventListener('click', () => {
+	// 	plusSlides(-1);
+	// });
+	// arrowNext.addEventListener('click', () => {
+	// 	plusSlides(1);
+	// });
+
+	// ======================= Slider 2 (animation)
+
 	const slides = document.querySelectorAll('.offer__slide'),
 		arrowPrev = document.querySelector('.offer__slider-prev'),
 		arrowNext = document.querySelector('.offer__slider-next'),
 		current = document.querySelector('#current'),
-		total = document.querySelector('#total');
-	let slideIndex = 1;
+		total = document.querySelector('#total'),
+		slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+		slidesField = document.querySelector('.offer__slider-inner'),
+		width = window.getComputedStyle(slidesWrapper).width;
 
-	showSlides(slideIndex);
+	let slideIndex = 1,
+		offset = 0;
+
+	slidesWrapper.style.overflow = 'hidden';
+
+	slidesField.style.width = 100 * slides.length + '%';
+	slidesField.style.display = 'flex';
+	slidesField.style.transition = '0.3s all';
+
+	slides.forEach(item => {
+		item.style.width = width;
+	});
 
 	if (slides.length < 10) {
-		total.textContent = '0' + slides.length;
+		total.textContent = `0${slides.length}`;
+		current.textContent = `0${slideIndex}`;
 	} else {
 		total.textContent = slides.length;
+		current.textContent = slideIndex;
 	}
 
-	function showSlides(n) {
-		if (n > slides.length) {
+	arrowNext.addEventListener('click', () => {
+		if (offset == parseInt(width) * (slides.length - 1)) {
+			offset = 0;
+		} else {
+			offset += parseInt(width);
+		}
+
+		slidesField.style.transform = `translateX(-${offset}px)`;
+
+		if (slideIndex == slides.length) {
 			slideIndex = 1;
-		}
-		if (n < 1) {
-			slideIndex = slides.length;
+		} else {
+			slideIndex++;
 		}
 
-		slides.forEach((slide) => {
-			slide.classList.add('hide');
-			slide.classList.remove('show');
-		});
-		slides[slideIndex - 1].classList.add('show');
-
-		if (slideIndex < 10) {
-			current.textContent = '0' + slideIndex;
+		if (slides.length < 10) {
+			current.textContent = `0${slideIndex}`;
 		} else {
 			current.textContent = slideIndex;
 		}
-	}
-
-	function plusSlides(n) {
-		slideIndex += n;
-		showSlides(slideIndex);
-	}
+	});
 
 	arrowPrev.addEventListener('click', () => {
-		plusSlides(-1);
-	});
-	arrowNext.addEventListener('click', () => {
-		plusSlides(1);
+		if (offset == 0) {
+			offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+		} else {
+			offset -= +width.slice(0, width.length - 2);
+		}
+
+		slidesField.style.transform = `translateX(-${offset}px)`;
+
+		if (slideIndex == 1) {
+			slideIndex = slides.length;
+		} else {
+			slideIndex--;
+		}
+
+		if (slides.length < 10) {
+			current.textContent = `0${slideIndex}`;
+		} else {
+			current.textContent = slideIndex;
+		}
 	});
 });
