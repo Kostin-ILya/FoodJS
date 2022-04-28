@@ -562,11 +562,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	// ============================== Calc
+
 	const result = document.querySelector('.calculating__result span');
-	let sex, height, weight, age, ratio;
+	let sex = 'female',
+		height,
+		weight,
+		age,
+		ratio = '1.375';
 
 	function calcTotal() {
-		if (!sex || !height || !weight || !age || ratio) {
+		if (!sex || !height || !weight || !age || !ratio) {
 			result.textContent = '____';
 			return;
 		}
@@ -581,42 +586,56 @@ document.addEventListener('DOMContentLoaded', () => {
 			);
 		}
 	}
-	calcTotal();
 
 	function getStaticInformation(parentSelector, activeClass) {
 		const elements = document.querySelectorAll(`${parentSelector} div`);
 
-		document.querySelector(parentSelector).addEventListener('click', (e) => {
-			if (e.target.getAttribute('data-ratio')) {
-				ratio += e.target.getAttribute('data-ratio');
-			} else {
-				sex = e.target.getAttribute('id');
+		elements.forEach((elem) => {
+			elem.addEventListener('click', (e) => {
+				if (e.target.getAttribute('data-ratio')) {
+					ratio = +e.target.getAttribute('data-ratio');
+				} else {
+					sex = e.target.getAttribute('id');
+				}
+
+				elements.forEach((item) => item.classList.remove(activeClass));
+
+				e.target.classList.add(activeClass);
+
+				calcTotal();
+			});
+		});
+	}
+
+	function getDynamicInformation(selector) {
+		const input = document.querySelector(selector);
+
+		input.addEventListener('input', () => {
+			switch (input.getAttribute('id')) {
+				case 'height':
+					height = +input.value;
+					break;
+				case 'weight':
+					weight = +input.value;
+					break;
+				case 'age':
+					age = +input.value;
+					break;
 			}
 
-			elements.forEach((elem) => elem.classList.remove(activeClass));
-
-			e.target.classList.add(activeClass);
-
-			console.log(ratio, sex);
+			calcTotal();
 		});
-		// elements.forEach((elem) => {
-		// 	elem.addEventListener('click', (e) => {
-		// 		if (e.target.getAttribute('data-ratio')) {
-		// 			ratio += e.target.getAttribute('data-ratio');
-		// 		} else {
-		// 			sex = e.target.getAttribute('id');
-		// 		}
-		// 		console.log(ratio, sex);
-
-		// 		elements.forEach((item) => item.classList.remove(activeClass));
-
-		// 		e.target.classList.add(activeClass);
-		// 	});
-		// });
 	}
+
+	calcTotal();
+
 	getStaticInformation('#gender', 'calculating__choose-item_active');
 	getStaticInformation(
 		'.calculating__choose_big',
 		'calculating__choose-item_active'
 	);
+
+	getDynamicInformation('#height');
+	getDynamicInformation('#weight');
+	getDynamicInformation('#age');
 });
