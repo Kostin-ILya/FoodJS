@@ -566,19 +566,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	const result = document.querySelector('.calculating__result span');
 	let sex, height, weight, age, ratio;
 
-	if (localStorage.getItem('sex')) {
-		sex = localStorage.getItem('sex');
+	if (localStorage.sex) {
+		sex = localStorage.sex;
+		// if (localStorage.getItem('sex')) {
+		// 	sex = localStorage.getItem('sex')
+		// }
 	} else {
 		sex = 'female';
-		localStorage.setItem('sex', sex);
+		localStorage.sex = sex;
 	}
-	if (localStorage.getItem('ratio')) {
-		ratio = localStorage.getItem('ratio');
+	if (localStorage.ratio) {
+		ratio = localStorage.ratio;
 	} else {
 		ratio = '1.375';
-		localStorage.setItem('ratio', ratio);
+		localStorage.ratio = ratio;
 	}
-
 	// if (localStorage.getItem('height')) {
 	// 	height = localStorage.getItem('height');
 	// 	document.querySelector('#height').value = height;
@@ -591,21 +593,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	// 	age = localStorage.getItem('age');
 	// 	document.querySelector('#age').value = age;
 	// }
-
-	function initLocalSettings(selector, activeClass) {
-		const elements = document.querySelectorAll(selector);
-
-		elements.forEach((elem) => {
-			elem.classList.remove(activeClass);
-
-			if (elem.getAttribute('id') === localStorage.getItem('sex')) {
-				elem.classList.add(activeClass);
-			}
-			if (elem.getAttribute('data-ratio') === localStorage.getItem('ratio')) {
-				elem.classList.add(activeClass);
-			}
-		});
-	}
 
 	function calcTotal() {
 		if (!sex || !height || !weight || !age || !ratio) {
@@ -624,18 +611,36 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
+	function initLocalSettings(selector, activeClass) {
+		const elements = document.querySelectorAll(selector);
+
+		elements.forEach((elem) => {
+			elem.classList.remove(activeClass);
+
+			if (elem.id === localStorage.sex) {
+				elem.classList.add(activeClass);
+			}
+			if (elem.dataset.ratio === localStorage.ratio) {
+				// elem.getAttribute('data-ratio') === localStorage.getAttribute('ratio');
+				elem.classList.add(activeClass);
+			}
+		});
+	}
+
 	function getStaticInformation(selector, activeClass) {
 		const elements = document.querySelectorAll(selector);
 
 		elements.forEach((elem) => {
 			elem.addEventListener('click', (e) => {
 				if (e.target.getAttribute('data-ratio')) {
-					ratio = +e.target.getAttribute('data-ratio');
-					localStorage.setItem('ratio', ratio);
+					ratio = +e.target.dataset.ratio;
+					// ratio = +e.target.getAttribute('data-ratio');
+					localStorage.ratio = ratio;
 					// localStorage.setItem('ratio', +e.target.getAttribute('data-ratio')); У Ивана так
 				} else {
 					sex = e.target.getAttribute('id');
-					localStorage.setItem('sex', sex);
+					// localStorage.setItem('sex', sex);
+					localStorage.sex = sex;
 				}
 
 				elements.forEach((item) => item.classList.remove(activeClass));
