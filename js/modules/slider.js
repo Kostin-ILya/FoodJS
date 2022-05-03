@@ -1,14 +1,23 @@
-function slider() {
+function slider({
+	container,
+	slide,
+	prevArrow,
+	nextArrow,
+	currentCounter,
+	totalCounter,
+	wrapper,
+	field,
+}) {
 	// ======================= Slider 2 (animation + dots)
 
-	const slides = document.querySelectorAll('.offer__slide'),
-		slider = document.querySelector('.offer__slider'),
-		arrowPrev = document.querySelector('.offer__slider-prev'),
-		arrowNext = document.querySelector('.offer__slider-next'),
-		current = document.querySelector('#current'),
-		total = document.querySelector('#total'),
-		slidesWrapper = document.querySelector('.offer__slider-wrapper'),
-		slidesField = document.querySelector('.offer__slider-inner'),
+	const slides = document.querySelectorAll(slide),
+		slider = document.querySelector(container),
+		prev = document.querySelector(prevArrow),
+		next = document.querySelector(nextArrow),
+		current = document.querySelector(currentCounter),
+		total = document.querySelector(totalCounter),
+		slidesWrapper = document.querySelector(wrapper),
+		slidesField = document.querySelector(field),
 		width = window.getComputedStyle(slidesWrapper).width;
 
 	let slideIndex = 1,
@@ -68,7 +77,7 @@ function slider() {
 		current.textContent = slideIndex;
 	}
 
-	arrowNext.addEventListener('click', () => {
+	next.addEventListener('click', () => {
 		if (offset == deleteNotDigits(width) * (slides.length - 1)) {
 			offset = 0;
 		} else {
@@ -87,7 +96,7 @@ function slider() {
 		showActiveDot();
 	});
 
-	arrowPrev.addEventListener('click', () => {
+	prev.addEventListener('click', () => {
 		if (offset == 0) {
 			offset = deleteNotDigits(width) * (slides.length - 1);
 		} else {

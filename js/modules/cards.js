@@ -1,3 +1,5 @@
+import { getResourse } from '../services/services';
+
 function cards() {
 	class MenuCard {
 		constructor(src, alt, title, descr, price, parentSelector, ...classes) {
@@ -41,16 +43,6 @@ function cards() {
 
 			this.parent.append(elem);
 		}
-	}
-
-	async function getResourse(url) {
-		let res = await fetch(url);
-
-		if (!res.ok) {
-			throw new Error(`Ошибочка ${url}, status: ${res.status}`);
-		}
-
-		return await res.json();
 	}
 
 	getResourse('http://localhost:3000/menu')

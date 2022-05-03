@@ -5,11 +5,33 @@ import modal from './modules/modal';
 import slider from './modules/slider';
 import tabs from './modules/tabs';
 import timer from './modules/timer';
+import { openModal } from './modules/modal';
 
-calc();
-cards();
-forms();
-modal();
-slider();
-tabs();
-timer();
+window.addEventListener('DOMContentLoaded', () => {
+	const modalTimerId = setTimeout(
+		() => openModal('.modal', modalTimerId),
+		50000
+	);
+
+	calc();
+	cards();
+	forms('form', modalTimerId);
+	modal('[data-modal]', '.modal', modalTimerId);
+	slider({
+		container: '.offer__slider',
+		slide: '.offer__slide',
+		prevArrow: '.offer__slider-prev',
+		nextArrow: '.offer__slider-next',
+		currentCounter: '#current',
+		totalCounter: '#total',
+		wrapper: '.offer__slider-wrapper',
+		field: '.offer__slider-inner',
+	});
+	tabs(
+		'.tabheader__item',
+		'.tabcontent',
+		'.tabheader',
+		'tabheader__item_active'
+	);
+	timer('.timer', '2022-09-01');
+});

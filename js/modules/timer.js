@@ -1,6 +1,4 @@
-function timer() {
-	const deadLine = '2022-08-01';
-
+function timer(timerSelector, deadline) {
 	function getTimeRemaining(endtime) {
 		const t = Date.parse(endtime) - Date.parse(new Date()),
 			days = Math.floor(t / (1000 * 60 * 60 * 24)),
@@ -49,7 +47,7 @@ function timer() {
 		}
 	}
 
-	setClock('.timer', deadLine);
+	setClock(timerSelector, deadline);
 }
 
 export default timer;
