@@ -33,5 +33,5 @@ window.addEventListener('DOMContentLoaded', () => {
 		'.tabheader',
 		'tabheader__item_active'
 	);
-	timer('.timer', '2022-09-01');
+	timer('.timer', '2022-10-01');
 });
